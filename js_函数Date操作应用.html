@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+<body>
+	<select name="" id=""></select><span>年</span>
+	<select name="" id=""></select><span>月</span>
+	<select name="" id=""></select><span>日</span>
+	<select name="" id=""></select>	<span>时</span>
+	<select name="" id=""></select><span>分</span>
+	<select name="" id=""></select><span>秒</span>
+	<p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+	<script>
+		var oSelects = document.getElementsByTagName('select');
+		addOption(2000,2032,oSelects[0]);
+		addOption(1,12,oSelects[1]);
+		addOption(1,31,oSelects[2]);
+		addOption(1,23,oSelects[3]);
+		addOption(1,59,oSelects[4]);
+		addOption(1,59,oSelects[5]);
+		//监听select,当年份、月份改变时，修改日期的可选择项；
+		oSelects[0].addEventListener('change', setDate);
+		oSelects[1].addEventListener('change', setDate);
+		oSelects[0].addEventListener('change', getInterval);
+		oSelects[1].addEventListener('change', getInterval);
+		oSelects[2].addEventListener('change', getInterval);
+		oSelects[3].addEventListener('change', getInterval);
+		oSelects[4].addEventListener('change', getInterval);
+		oSelects[5].addEventListener('change', getInterval);
+
+		/**
+		 * [getInterval 计算时间间隔];
+		 */
+		function getInterval(){
+			var Y = getValue(0);
+			var M = getValue(1);
+			var D = getValue(2);
+			var h = getValue(3);
+			var m = getValue(4);
+			var s = getValue(5);
+			var tagDate = new Date(Date.UTC(Y,M,D,h,m,s));
+			var nowTime = nowDate();
+			var oResultWrapper = document.getElementById('result-wrapper');
+			if(tagDate.getTime() > nowTime.getTime()){
+				var interval = tagDate.getTime() - nowTime.getTime();
+				interval = turnTime(interval);
+				oResultWrapper.innerHTML = "现在距离" + Y + "年" + M + "月" + D + "日 " + h + "：" + m + "：" + s + " 还有"+interval;
+			}else{
+				var interval = nowTime.getTime() - tagDate.getTime();
+				interval = turnTime(interval);
+				oResultWrapper.innerHTML = "现在距离" + Y + "年" + M + "月" + D + "日 " + h + "：" + m + "：" + s + " 过去了"+interval;
+			};
+		};
+
+		/**
+		 * [turnTime 讲毫秒时间转换为天时分格式]
+		 * @param  {[type]} mss [目标毫秒单位时间]
+		 * @return {[type]}     [转换结果]
+		 */
+		function turnTime(mss){
+		    var days = parseInt(mss / (1000 * 60 * 60 * 24));
+		    var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+		    var seconds = (mss % (1000 * 60)) / 1000;
+		    return days + " 天 " + hours + " 小时 " + minutes + " 分钟 " + seconds + " 秒 ";
+		};
+		/**
+		 * [getValue 获取选中的选项的value]
+		 * @param  {[type]} i [目标选框索引]
+		 * @return {[type]}   [返回value]
+		 */
+		function getValue(i){
+			var oSelects = document.getElementsByTagName('select');
+			var v = oSelects[i].options[oSelects[i].selectedIndex].value;
+			return v;
+		};
+
+		/**
+		 * [setDate 修改日期以符合年份、月份]
+		 */
+		function setDate(){
+			var oSelects = document.getElementsByTagName('select');
+			var v = oSelects[1].options[oSelects[1].selectedIndex].value;
+			v = parseInt(v);
+			switch(v) {
+				case 2:
+					console.log(v);
+					if (parseInt(oSelects[0].options[oSelects[0].selectedIndex].value)%4 === 0) {
+						setOptions(2,29);
+					}else{
+						setOptions(2,28);
+					};
+					break;
+				case 1:
+					setOptions(2,30);
+					console.log(v);
+					break
+				case 3:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 5:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 7:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 8:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 10:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 12:
+					setOptions(2,30);
+					console.log(v);
+					break;
+				case 4:
+					console.log(v);
+					setOptions(2,29);
+					break;
+				case 6:
+					console.log(v);
+					setOptions(2,29);
+					break;
+				case 9:
+					console.log(v);
+					setOptions(2,29);
+					break;
+				case 11:
+					console.log(v);
+					setOptions(2,29);
+					break;
+			};
+			oSelects[1].options[oSelects[1].selectedIndex].value
+		}
+
+		/**
+		 * [setOptions 设置option选项display]
+		 * @param {[type]} j [select索引]
+		 * @param {[type]} k [显示的option尾项索引]
+		 */
+		function setOptions(j,k){
+			var oOptions = getOptions(j);
+			for(var i = 0;i<oOptions.length;i++){
+				oOptions[i].style.display = "block";
+			}
+			for(var m = k;m<oOptions.length;m++){
+				oOptions[m].style.display = "none";
+			};
+		};
+
+		/**
+		 * [getOptions 获取绑定select中的option]
+		 * @param  {[type]} i [select索引]
+		 * @return {[type]}   [获取的option，注意：获取的为集合]
+		 */
+		function getOptions(i){
+			var oOption = document.getElementsByTagName('select')[i].getElementsByTagName('option');
+			return oOption;
+		};
+
+		/**
+		 * [addOption 往select中添加option]
+		 * @param {[type]} i       [开始值]
+		 * @param {[type]} j       [结束值]
+		 * @param {[type]} oSelect [目标select]
+		 */
+		function addOption(i,j,oSelect){
+			for(var i = i,j = j;i<=j;i++){
+				var oOption = createOption(i,oSelect);
+				oSelect.appendChild(oOption);
+			};
+		};
+
+		/**
+		 * [createOption 创建option]
+		 * @param  {[type]} value [值]
+		 * @return {[type]}       [option]
+		 */
+		function createOption(value){
+			var oOption = document.createElement("option");
+			oOption.value = value;
+			oOption.innerHTML = value;
+			return oOption;
+		};
+
+		//Date方法详表参见《JavaScript高级程序设计3版》p102页；
+		function nowDate(){
+			var dar = new Date()
+			var Y = dar.getFullYear();
+			var M = dar.getMonth();
+			var D = dar.getDate();
+			var h = dar.getHours();
+			var m = dar.getMinutes();
+			var s = dar.getSeconds();
+			M = M +1;
+			var result = new Date(Date.UTC(Y, M, D, h, m, s));
+			return result;
+		};
+
+		function checkTime(i){
+			if (i<10){
+				i = "0" + i
+			}
+			return i;
+		}
+	</script>
+</body>
+</html>
