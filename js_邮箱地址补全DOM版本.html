@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		input{
+			width: 300px;
+			height: 30px;
+			line-height: 40px;
+			font-size: 20px;
+		}
+		ul{
+			list-style-type: none;
+			border: 1px solid gray;
+			width: 302px;
+			display: none;
+		}
+		li{
+			height: 30px;
+			font-size: 20px;
+		}
+		li:hover{
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+	    <input id="email-input" type="text">
+	    <ul id="email-sug-wrapper" class="email-sug">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+	    </ul>
+	</div>
+
+    <script>
+    	var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+    	var oEmailInput = document.getElementById('email-input');
+    	var oEmailSugWrapper = document.getElementById('email-sug-wrapper');
+    	oEmailInput.addEventListener('keyup', function(e) {
+    		setSug();
+    		sugControl();
+    	});
+    	oEmailSugWrapper.addEventListener('click', function(e) {
+    		oEmailInput.value = e.target.innerHTML;
+    		hideSug();
+    	});
+    	oEmailInput.addEventListener('keyup', function(e) {
+    		console.log(e.key+e.keyCode);
+    		if(e.keyCode!= 27|38|40|13){
+    			setLi();
+    		};
+    	});
+
+        function setLi(){
+
+        };
+    	/**
+    	 * [getInput 获取输入框value]
+    	 * @return {[type]} input [value]
+    	 */
+    	function getInput(){
+    		var oEmailInput = document.getElementById('email-input');
+    		var input = oEmailInput.value;
+    		input = input.trim();
+    		return input;
+    	};
+
+    	/**
+    	 * [setSug 设置建议地址]
+    	 */
+    	function setSug(){
+    		var oLis = document.getElementsByTagName('li');
+    		for(var i=0;i<5;i++){
+    			oLis[i].style.display = "list-item";
+    		};
+    		var input = getInput();
+    		if(input.indexOf("@") != -1){
+    			var inputBefore = input.substring(0,input.indexOf("@"));
+    			var inputAfter = input.substring(input.indexOf("@")+1);
+    			for(var i = 0;i < 5; i++){
+    				var regexp = new RegExp("^" + inputAfter);
+    				var oLi = document.getElementsByTagName('li');
+    				if(postfixList[i].match(regexp)){
+    					input = inputBefore + "@" + postfixList[i];
+    					oLi[i].innerHTML = input;
+    				}else{
+    					oLi[i].style.display = "none";
+    				};
+    			};
+    		}else{
+	    		for(var i = 0;i < 5;i++){
+	    			oLis[i].innerHTML = input + "@" + postfixList[i]; 
+	    		}
+    		};
+
+    	};
+
+    	/**
+    	 * [sugControl 控制sug显示隐藏]
+    	 * @return {[type]} [description]
+    	 */
+    	function sugControl(){
+    	 	var input = getInput();
+    	 	if(input === ''){
+    	 		hideSug();
+    	 	}else{
+    	 		showSug();
+    	 	};
+    	};
+
+
+    	/**
+    	 * [showSug 显示sug]
+    	 * @return {[type]} [description]
+    	 */
+    	function showSug(){
+    		var oEmailSugWrapper = document.getElementById('email-sug-wrapper');
+    		oEmailSugWrapper.style.display = "block";
+    	};
+
+    	/**
+    	 * [hideinput 隐藏sug]
+    	 * @return {[type]} [description]
+    	 */
+    	function hideSug(){
+    		var oEmailSugWrapper = document.getElementById('email-sug-wrapper');
+    		oEmailSugWrapper.style.display = "none";
+    	};
+
+
+
+
+    	/*
+    	- 设计流程图
+		用户输入->提示框进行反馈
+
+		那核心流程进一步进行拆解，就包括了：
+
+		发现用户输入->获取用户输入内容->生成提示框提示内容->进行提示
+
+		第一步，发现用户输入，可以利用监听用户在输入框的输入对应的事件，尝试用keyup, keypress, keydown以及oninput四个事件分别来测试对于用户输入的事件监听，并在事件响应函数中增加console.log('event handle')。并尝试以下输入方式，观察提示框内容变化的情况，以及console的输出情况：
+
+		一个字母一个字母的输入
+		一个字母一个字母输入，同时加上按回车键，ESC键，上下左右键
+		按住某个字母键不动
+		记住试验结论，然后就上面4个事件进行搜索，阅读相关规范标准及技术文章。根据实验结果选择你认为合适的事件监听方式。
+
+		第一步是后面几步的起点，所以，我们可以把后面几步各自封装成一个函数，在第一步里进行调用
+
+		第二步，获取用户输入，这个比较简单，注意考虑trim
+
+		第三步，生成提示框提示内容，根据第二步获得的内容，遍历postfixList数组，生成要在email-sug-wrapper的UL中填充的内容。
+
+		第四步，根据实际是否有提示内容，控制email-sug-wrapper的显示/隐藏情况
+
+		这样，这个任务被分解为4个步骤，你要做的就是实现这4个步骤的代码细节。
+
+    	 */
+    </script>
+
+</div>
+</body>
+</html>

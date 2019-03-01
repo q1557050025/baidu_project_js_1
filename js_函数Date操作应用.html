@@ -24,12 +24,10 @@
 		//监听select,当年份、月份改变时，修改日期的可选择项；
 		oSelects[0].addEventListener('change', setDate);
 		oSelects[1].addEventListener('change', setDate);
-		oSelects[0].addEventListener('change', getInterval);
-		oSelects[1].addEventListener('change', getInterval);
-		oSelects[2].addEventListener('change', getInterval);
-		oSelects[3].addEventListener('change', getInterval);
-		oSelects[4].addEventListener('change', getInterval);
-		oSelects[5].addEventListener('change', getInterval);
+
+		for(var i = 0;i<6;i++){
+			oSelects[i].addEventListener('change', getInterval);
+		}
 
 		/**
 		 * [getInterval 计算时间间隔];
@@ -87,7 +85,6 @@
 			v = parseInt(v);
 			switch(v) {
 				case 2:
-					console.log(v);
 					if (parseInt(oSelects[0].options[oSelects[0].selectedIndex].value)%4 === 0) {
 						setOptions(2,29);
 					}else{
@@ -95,48 +92,37 @@
 					};
 					break;
 				case 1:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break
 				case 3:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 5:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 7:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 8:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 10:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 12:
-					setOptions(2,30);
-					console.log(v);
+					setOptions(2,31);
 					break;
 				case 4:
-					console.log(v);
-					setOptions(2,29);
+					setOptions(2,30);
 					break;
 				case 6:
-					console.log(v);
-					setOptions(2,29);
+					setOptions(2,30);
 					break;
 				case 9:
-					console.log(v);
-					setOptions(2,29);
+					setOptions(2,30);
 					break;
 				case 11:
-					console.log(v);
-					setOptions(2,29);
+					setOptions(2,30);
 					break;
 			};
 			oSelects[1].options[oSelects[1].selectedIndex].value
