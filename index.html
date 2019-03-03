@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="text" id="ii">
+	<script>
+		var i = document.getElementById('ii');
+		i.addEventListener('keydown', function(e) {
+			console.log(e.keyCode);
+			console.log(38 === (38|40))
+			if(e.keyCode === 38){
+				console.log("lkrjewo");
+			};
+		});
+	</script>
+</body>
+</html>

@@ -4,29 +4,37 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
-		*{
+		* {
 			padding: 0;
 			margin: 0;
 		}
-		input{
+
+		input {
 			width: 300px;
 			height: 30px;
 			line-height: 40px;
 			font-size: 20px;
 		}
-		ul{
+
+		ul {
 			list-style-type: none;
 			border: 1px solid gray;
 			width: 302px;
 			display: none;
 		}
-		li{
+
+		li {
 			height: 30px;
 			font-size: 20px;
 		}
-		li:hover{
+
+		li:hover {
 			background-color: red;
 		}
+
+        ul .active {
+            background-color: orange;
+        }
 	</style>
 </head>
 <body>
@@ -34,8 +42,8 @@
 	    <input id="email-input" type="text">
 	    <ul id="email-sug-wrapper" class="email-sug">
 			<li></li>
-			<li></li>
-			<li></li>
+            <li class="active kjs"></li>
+			<li class="active kjs"></li>
 			<li></li>
 			<li></li>
 	    </ul>
@@ -45,24 +53,107 @@
     	var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
     	var oEmailInput = document.getElementById('email-input');
     	var oEmailSugWrapper = document.getElementById('email-sug-wrapper');
-    	oEmailInput.addEventListener('keyup', function(e) {
-    		setSug();
-    		sugControl();
-    	});
+
+        window.addEventListener('load', function(e) {
+            oEmailInput.focus();
+        }); 
+        
+        //点击提示邮箱地址，将地址输入到input；
     	oEmailSugWrapper.addEventListener('click', function(e) {
     		oEmailInput.value = e.target.innerHTML;
     		hideSug();
+            oEmailInput.focus();
     	});
+
+        //阻止光标移动；
+        oEmailInput.addEventListener('keydown', function(e) {
+            if(e.keyCode === 38 |e.keyCode === 40 |e.keyCode === 13 ){
+               e.preventDefault();
+            };
+        });
+
+        //监听特殊按键，做出操作；如果非特殊按键则重置强调选项卡；
     	oEmailInput.addEventListener('keyup', function(e) {
-    		console.log(e.key+e.keyCode);
-    		if(e.keyCode!= 27|38|40|13){
-    			setLi();
-    		};
+    		if(e.keyCode === 38 |e.keyCode === 40 |e.keyCode === 13 ){
+                var oLis = document.getElementsByTagName('li');
+                switch(e.keyCode){
+                    case 38://按up方向键，向上移动active；
+                        if(hasActive(oLis[0])){
+                            clearLi();
+                            oLis[4].classList.add("active");
+                        }else{
+                            var j = findActive();
+                            clearLi();
+                            oLis[j-1].classList.add("active");
+                        };
+                        break;
+                    case 40://按down方向键，向下移动activ；
+                        if(hasActive(oLis[4])){
+                            clearLi();
+                            oLis[0].classList.add("active");
+                        }else{
+                            var j = findActive();
+                            clearLi();
+                            oLis[j+1].classList.add("active");
+                        };
+                        break;
+                    case 13://按下回车键，将选中内容填入input；
+                        var j = findActive();
+                        hideSug();
+                        oEmailInput.value = oLis[j].innerHTML;
+                };
+    		}else{
+                setLi();
+                setSug();
+                sugControl();
+            };
     	});
 
-        function setLi(){
-
+        /**
+         * [findActive 查询被选中的li]
+         * @return {[type]} j [索引]
+         */
+        function findActive(){
+            var oLis = document.getElementsByTagName('li');
+            for(var i = 0;i < 5;i++){
+                if(hasActive(oLis[i])){
+                    j = i
+                };
+            };
+            return j;
+        }
+        /**
+         * [hasActive 检测对象是否具有active类]
+         * @param  {[type]}  obj [目标对象]
+         * @return {Boolean}     [返回布尔]
+         */
+        function hasActive(obj){
+            if(obj.classList.length>0){
+                return obj.classList.contains("active")
+            }else{
+                return false;
+            };
         };
+
+        /**
+         * [clearLi 清除所有active]
+         */
+        function clearLi(){
+            var oLis = document.getElementsByTagName('li');
+            for(var i=0;i<5;i++){
+                oLis[i].classList.remove("active");
+            };
+        };
+        
+        /**
+         * [setLi 重置li强调为第一个]
+         */
+        function setLi(){
+            clearLi();
+            var oLis = document.getElementsByTagName('li');
+            oLis[0].classList.add("active");
+        };
+
     	/**
     	 * [getInput 获取输入框value]
     	 * @return {[type]} input [value]
