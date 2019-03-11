@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //方法一：双层循环
+
+        var arr = [1, 1, 2, 3, 5, 3, 1, 5, 6, 7, 4];
+
+
+        function unique0(arr) {
+            var result = [],
+                i,
+                j,
+                len = arr.length;
+            for (i = 0; i < len; i++) {
+                for (j = i + 1; j < len; j++) {
+                    if (arr[i] === arr[j]) {
+                        ++i
+                    }
+                }
+                result.push(arr[i]);
+            }
+            return result;
+        }
+
+        console.log(unique0(arr)); //[2, 3, 1, 5, 6, 7, 4]这种方法输出的元素是重复项的最后项顺序；
+
+        //方法一：双重循环优化
+        function unique1(arr) {
+            var res = [arr[0]];
+            for (var i = 1; i < arr.length; i++) {
+                var repeat = false;
+                for (var j = 0; j < res.length; j++) {
+                    if (arr[i] === res[j]) {
+                        repeat = true;
+                        break;
+                    }
+                }
+                if (!repeat) {
+                    res.push(arr[i]);
+                }
+            }
+            return res;
+        }
+
+        console.log(unique1(arr)); //[1, 2, 3, 5, 6, 7, 4]这种方法输出的元素是重复项的首项顺序
+
+        //方法二：排序，相邻比较，不同则加入新数组；
+        function unique2(arr){
+            var arr = arr.concat();//此处进行复制数组操作，否则，下面的sort（）会改变源数组；
+            var arr2 = arr.sort();
+            var res = [arr2[0]];
+            for(var i = 1; i < arr2.length; i++){
+                if(arr2[i] !== res[res.length - 1]){
+                    res.push(arr2[i]);
+                }
+            }
+            return res;
+        }
+
+        console.log(unique2(arr));//[1, 2, 3, 4, 5, 6, 7]结果会sort排序；
+
+        //方法三：利用对象属性存在特性，如果res没有该属性则，存入新数组；
+
+        function unique3(arr){
+            var res = [];
+            var obj = {};
+            for(var i = 0; i <arr.length; i++ ){
+                if(!obj[arr[i]]){
+                    obj[arr[i]] = 1;
+                    res.push(arr[i]);
+                    console.log(arr[i]);
+                }
+            }
+            return res;
+        }
+
+        console.log(unique3(arr));
+
+        //方法四：利用数组的indexOf下标属性来查询；
+        function unique4(arr){
+            var res = [];
+            for(var i = 0; i < arr.length; i++){
+                if(res.indexOf(arr[i]) === -1){
+                    res.push(arr[i]);
+                }
+            }
+            return res;
+        }
+
+        // 方法五：利用数组原型对象上的includes方法；
+        function unique5(arr){
+            var res = [];
+
+            for(var i = 0; i < arr.length; i++){
+                if(!res.includes(arr[i])){ //includes为es6新方法；
+                    res.push(arr[i]);
+                }
+            }
+            return res;
+        }
+
+        console.log("unique5:",unique5(arr));
+
+        //方法六：利用数组原型对象上的fliter和includes方法；??????
+        function unique6(arr){
+            var res = [];
+            res = arr.filter(function(item){
+                return res.includes(item)?'':res.push(item);
+            });
+            return res;
+        }
+
+        console.log("unique6:",unique6(arr));
+
+        //方法七：forEach & includes 实现；
+        function unqiue7(arr){
+            var res = [];
+            arr.forEach(function(item){
+                res.includes(item)?'':res.push(item);
+            });
+            return res;
+        }
+
+        //方法八：利用ES6中的set方法；
+        function unique8(arr){
+            return Array.from(new Set(arr));
+        }
+        console.log("unique8:",unique8(arr));
+        
+    </script>
+</body>
+
+</html>
